@@ -20,7 +20,6 @@
 
 Данные будут храниться в БД. Схема БД представлена ниже.
 https://drawsql.app/yandex-7/diagrams/filmorate/embed
-![This is an image](E:\Yandex\Project_practicum\java-filmorate\java-filmorate\filmorate)
 
 Примеры Endpoint запросов (программа написана на Java):
 
@@ -38,4 +37,22 @@ https://drawsql.app/yandex-7/diagrams/filmorate/embed
         return filmService.putLike(id, userId);
     }
 }
+```
+
+Примеры запросов в БД (используемый язык: Java и SQL):
+
+```java
+
+    @Override
+    public Genre getGenreById(Long genreId) {
+        if (genreId < 1) {
+            throw new InvalidValueException("Введен некорректный идентификатор жанра.");
+        }
+        String sql =
+                "SELECT * " +
+                        "FROM GENRES " +
+                        "WHERE GENRE_ID = ?";
+        return jdbcTemplate.query(sql, (rs, rowNum) -> makeGenre(rs), genreId)
+                .stream().findAny().orElse(null);
+    }
 ```
